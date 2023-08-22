@@ -9,7 +9,7 @@ class RailwayStation
     self.lists_trains = []
 
   end
-  def train_arrival(train_type, wagons)
+  def train_arrival(train_type)
     
     self.lists_trains<<{type: train_type, wagons: wagons}
   end

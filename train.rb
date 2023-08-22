@@ -1,10 +1,11 @@
 class Train
-  attr_writer :speed 
+  attr_writer :speed, :route
   attr_accessor :wagons
 
   def initialize
     self.wagons = 0
     self.speed = 0
+    self.route = []
   end
   
   def start_engine
@@ -35,15 +36,28 @@ class Train
       p "Невозможно прицепить данный вагон"
     end
   end
+  def unhook_the_wagon
+    if can_unhook_wagon?
+      self.wagons -= 1
+    else
+      p "Невозможно отценпить вагон, так как прицепленных вагонов нет"
+    end
+  end
 
-  #принять маршрут
+  
+  def take_route(route)
+    self.route = route
+  end
 
-  #показать маршрут
   protected
 
   attr_reader :speed
   def can_attach_wagon?(wagon)
     true 
+  end
+
+  def can_unhook_wagon?
+    self.wagons > 0
   end
 
   def initial_speed

@@ -6,6 +6,13 @@ class CargoTrain < Train
     else
       p "Вагон не является грузовым"
     end
+    def unhook_the_wagon
+      if can_unhook_train?
+        self.wagons -= 1
+      else
+        #p "Невозможно отцепить данный вагон"
+      end
+    end
   end
   protected
   def initial_speed

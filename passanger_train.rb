@@ -8,6 +8,14 @@ class PassangerTrain < Train
       p "Вагон не является пассажирским"
     end
   end
+
+  def unhook_the_wagon
+    if can_unhook_wagon?
+      self.wagons -= 1
+    else
+      #p "Невозможно отцепить данный вагон"
+    end
+  end
   
   protected
   
