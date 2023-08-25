@@ -1,13 +1,17 @@
 require_relative 'train'
 require_relative 'route'
 require_relative 'railway_station'
+require_relative 'instance_counter'
 class RailwayStation
+  include InstanceCounter
   attr_accessor :train_type, :wagons, :name_station, :train, :lists_trains, :name_station
+  @@list_stations = []
   
   def initialize (name_station)
     self.name_station = name_station
     self.lists_trains = []
-
+    save_stations(name_station)
+    register_instance
   end
   def train_arrival(train_type)
     
@@ -25,5 +29,14 @@ class RailwayStation
     type_counts.each do |train,count|
       p "Находится на станции #{name_station} поезда: #{train} в количестве: #{count} "
     end
+  end
+
+  def self.all
+    p @@list_stations
+  end
+
+  private
+  def save_stations(name_station)
+    @@list_stations << name_station
   end
 end

@@ -3,8 +3,10 @@ require_relative 'route'
 require_relative 'railway_station'
 require_relative 'passanger_wagon'
 require_relative 'passanger_train'
+require_relative 'wagon'
 require_relative 'cargo_wagon'
 require_relative 'cargo_train'
+require_relative 'manufacturer'
 
 class Main
   attr_accessor :stations, :passanger_trains, :cargo_trains, :passanger_wagons, :cargo_wagons, :routes

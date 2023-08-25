@@ -1,12 +1,24 @@
+require_relative 'manufacturer'
+require_relative 'instance_counter'
 class Train
-  attr_writer :speed, :route
+include Manufacturer
+include InstanceCounter
+  attr_writer :speed, :route, :train_number
   attr_accessor :wagons
+  @@train = []
 
-  def initialize
+  def initialize (train_number)
     self.wagons = 0
     self.speed = 0
+    self.train_number = train_number
     self.route = []
+    save_train(train_number)
+    register_instance
   end
+
+  def train_number
+    @train_number
+  end  
   
   def start_engine
     start_engine! if engine_stopped?
@@ -75,9 +87,14 @@ class Train
     self.speed = initial_speed
   end
 
- 
-  
-  
+  def self.find(train_number)
+    @@train.find { |train| train.train_number == train_number }
+  end
 
+  private
 
+  def save_train(train)
+    @@train << self
+  end
+  
 end
