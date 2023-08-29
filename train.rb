@@ -5,15 +5,20 @@ include Manufacturer
 include InstanceCounter
   attr_writer :speed, :route, :train_number
   attr_accessor :wagons
-  @@train = []
+  @@train = {}
 
   def initialize (train_number)
-    self.wagons = 0
+    
     self.speed = 0
     self.train_number = train_number
     self.route = []
-    save_train(train_number)
+    #save_train(train_number)
     register_instance
+    
+  end
+
+  def valid?
+    validate_train_number && validate_unique_train_number
   end
 
   def train_number
@@ -92,9 +97,22 @@ include InstanceCounter
   end
 
   private
-
-  def save_train(train)
-    @@train << self
+  
+  def validate_train_number
+    /^[a-zA-Z0-9]{3}-?[a-zA-Z0-9]{2}$/.match?(train_number)
   end
+
+  def validate_unique_train_number
+    if @@train[train_number]
+      raise "Поезд с номером #{train_number} уже существует"
+    else
+      @@train[train_number] = self
+    end
+    true
+  end
+
+  # def save_train(train) Метод становиться не нужным, если я делаю валидацию на уникальность, то я сразу сохраняю?
+  #   @@train[train_number] = self
+  # end
   
 end

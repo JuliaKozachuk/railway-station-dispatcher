@@ -8,11 +8,20 @@ class RailwayStation
   @@list_stations = []
   
   def initialize (name_station)
-    self.name_station = name_station
-    self.lists_trains = []
-    save_stations(name_station)
-    register_instance
+    if validate_name_station(name_station)
+      self.name_station = name_station
+      self.lists_trains = []
+      save_stations(name_station)
+      register_instance
+    else
+      puts 'Создание станции отменено из-за невалидного названия'
+    end
   end
+
+  def valid?
+    validate_name_station
+  end
+
   def train_arrival(train_type)
     
     self.lists_trains<<{type: train_type, wagons: wagons}
@@ -36,7 +45,14 @@ class RailwayStation
   end
 
   private
+  def validate_name_station(name_station)
+    return true if /^[a-zA-Zа-яА-Я\s]+$/.match(name_station)
+    
+    puts 'Название станции может содержать только русские или английские буквы'
+    false
+  end
   def save_stations(name_station)
     @@list_stations << name_station
   end
+
 end

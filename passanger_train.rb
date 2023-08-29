@@ -1,6 +1,12 @@
 require_relative 'train'
 class PassangerTrain < Train
   attr_accessor :wagons
+  def initialize(train_number)
+    super(train_number)
+  end
+  def valid?
+    super
+  end
   def attach_a_wagon(wagon)
     if wagon.is_a?(PassangerWagon)
       self.wagons += 1
