@@ -63,6 +63,8 @@ class Main
         add_station_to_route
       when 13
         list_stations
+      when 14
+        action_train
       when 0
         break
       else
@@ -80,7 +82,10 @@ class Main
   end
 
   def create_passenger_train
-    passanger_train = PassangerTrain.new
+    p 'Введите номер поезда:'
+    train_number = gets.chomp
+    passanger_train = PassangerTrain.new(train_number)
+    
     self.passanger_trains<<passanger_train
     p 'Пасажирский поезд создан'
   end
@@ -217,6 +222,15 @@ class Main
     selected_route = self.routes[route_index] 
      p selected_route.station_on_the_route
 
+  end
+
+  def action_train
+    p 'Выберете станцию:'
+    self.stations.each_with_index { |station, index| puts "#{index + 1}. Станция #{station.name_station}" }
+    change_station_index = gets.chomp.to_i
+    selected_station = self.stations[change_station_index - 1] 
+    selected_station.perform_actions_on_trains(RailwayStation::ACTION_LIST) do |train, action|
+    end
   end
 
 

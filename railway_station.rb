@@ -6,6 +6,7 @@ class RailwayStation
   include InstanceCounter
   attr_accessor :train_type, :wagons, :name_station, :train, :lists_trains, :name_station
   @@list_stations = []
+  ACTION_LIST = ['Генеральная уборка', 'Ремонт']
   
   def initialize (name_station)
     if validate_name_station(name_station)
@@ -42,6 +43,14 @@ class RailwayStation
 
   def self.all
     p @@list_stations
+  end
+
+  def perform_actions_on_trains(actions)
+    self.lists_trains.each do |train|
+      action = actions.sample
+      yield(train, action)
+      puts "'#{action}' для поезда: #{train}"
+    end
   end
 
   private
