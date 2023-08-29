@@ -1,20 +1,38 @@
+require_relative 'train'
+require_relative 'route'
+require_relative 'railway_station'
+require_relative 'instance_counter'
 class RailwayStation
-  attr_reader :train_type, :wagons, :name_station, :train, :lists_trains 
+  include InstanceCounter
+  attr_accessor :train_type, :wagons, :name_station, :train, :lists_trains, :name_station
+  @@list_stations = []
+  ACTION_LIST = ['Генеральная уборка', 'Ремонт']
+  
   def initialize (name_station)
-    @name_station = name_station
-    @lists_trains = []
-
+    if validate_name_station(name_station)
+      self.name_station = name_station
+      self.lists_trains = []
+      save_stations(name_station)
+      register_instance
+    else
+      puts 'Создание станции отменено из-за невалидного названия'
+    end
   end
-  def train_arrival(train_type, wagons)
+
+  def valid?
+    validate_name_station
+  end
+
+  def train_arrival(train_type)
     
-    @lists_trains<<{type: train_type, wagons: wagons}
+    self.lists_trains<<{type: train_type, wagons: wagons}
   end
   def train_departure(train_type,wagons)
-    @lists_trains.delete({type:train_type,wagons:wagons})
+    self.lists_trains.delete({type:train_type,wagons:wagons})
   end
   def list_of_trains_at_station
     type_counts = Hash.new(0)
-    @lists_trains.each do |train|
+    self.lists_trains.each do |train|
       type = train[:type]
       type_counts[type]+=1 
     end
@@ -22,4 +40,28 @@ class RailwayStation
       p "Находится на станции #{name_station} поезда: #{train} в количестве: #{count} "
     end
   end
+
+  def self.all
+    p @@list_stations
+  end
+
+  def perform_actions_on_trains(actions)
+    self.lists_trains.each do |train|
+      action = actions.sample
+      yield(train, action)
+      puts "'#{action}' для поезда: #{train}"
+    end
+  end
+
+  private
+  def validate_name_station(name_station)
+    return true if /^[a-zA-Zа-яА-Я\s]+$/.match(name_station)
+    
+    puts 'Название станции может содержать только русские или английские буквы'
+    false
+  end
+  def save_stations(name_station)
+    @@list_stations << name_station
+  end
+
 end
